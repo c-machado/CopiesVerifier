@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class SheetsQuickstart {
@@ -66,7 +67,7 @@ public class SheetsQuickstart {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:B10";
+        final String range = "Homepage!A3:B7";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -74,7 +75,20 @@ public class SheetsQuickstart {
                 .get(spreadsheetId, range)
                 .execute();
         List<List<Object>> values = response.getValues();
-        if (values == null || values.isEmpty()) {
+
+        System.out.println("Values INFO: +++++++" + values);
+
+        Iterator<List<Object>> it_value = values.iterator();
+        while (it_value.hasNext()){
+            String id, copy;
+            List value = it_value.next();
+            id = value.get(0).toString();
+            copy = value.get(1).toString();
+            System.out.println("Values ID's:" + id + "\nCOPY: "+copy);
+        }
+
+
+        /*if (values == null || values.isEmpty()) {
             System.out.println("No data found.");
         } else {
             System.out.println("Name, Major");
@@ -82,6 +96,6 @@ public class SheetsQuickstart {
                 // Print columns A and E, which correspond to indices 0 and 4.
                 System.out.printf("%s, %s\n", row.get(0), row.get(1));
             }
-        }
+        }*/
     }
 }
