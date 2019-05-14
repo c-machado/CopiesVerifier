@@ -106,8 +106,9 @@ public class Home_Page {
     }
 
     public void getHeroCarouselInfo(){
-        WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
-        waituntilCarouselIsLoaded.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-c-slide-1].carousel__item:not(.clone) a[href]")));
+        //WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
+        //waituntilCarouselIsLoaded.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-c-slide-1]")));
+                //.presenceOfElementLocated(By.cssSelector("[data-c-slide-1].carousel__item:not(.clone) a[href]")));
 
         System.out.println("1. hero_carousel_img_slide_1" + heroCarouselImgSlide1.getAttribute("src") + "\n");
 
