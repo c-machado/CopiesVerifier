@@ -12,6 +12,7 @@ public class Homepage {
     private Home_Page home_page;
 
     public void setUp() {
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("https://assistant.google.com/");
