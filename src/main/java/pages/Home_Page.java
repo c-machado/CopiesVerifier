@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+
 public class Home_Page {
 
     private WebDriver driver;
@@ -106,9 +108,8 @@ public class Home_Page {
     }
 
     public void getHeroCarouselInfo(){
-        //WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
-        //waituntilCarouselIsLoaded.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-c-slide-1]")));
-                //.presenceOfElementLocated(By.cssSelector("[data-c-slide-1].carousel__item:not(.clone) a[href]")));
+        WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
+        waituntilCarouselIsLoaded.until(presenceOfElementLocated(By.cssSelector("[data-c-slide-1]")));
 
         System.out.println("1. hero_carousel_img_slide_1" + heroCarouselImgSlide1.getAttribute("src") + "\n");
 
@@ -118,7 +119,7 @@ public class Home_Page {
         System.out.println("3. hero_carousel_learn_cta_slide_1" + heroCarouselLearnCtaSlide1.getAttribute("innerText") + "\n");
 
         System.out.println("4. hero_carousel_learn_link__slide_1" + heroCarouselLearnLinkSlide1.getAttribute("href") + "\n");
-//        heroCarouselLearnLinkSlide1.click();
+        heroCarouselLearnLinkSlide1.click();
     }
 
     public void getVideoInfo(){
