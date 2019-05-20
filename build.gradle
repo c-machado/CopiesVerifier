@@ -23,13 +23,15 @@ dependencies {
     compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '3.141.59'
     // https://mvnrepository.com/artifact/com.google.guava/guava
     compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
-
-
 }
 
 test { //this is the gradle task to be executed
     useTestNG() { //Tells Gradle to use TestNG
         useDefaultListeners = true // Tells TestNG to execute its default reporting structure
-        suites 'src/test/testng.xml' //location of our suite.xml
+        //suites 'src/test/testng.xml' //location of our suite.xml
+        reports.html.enabled = false
+    }
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
     }
 }
