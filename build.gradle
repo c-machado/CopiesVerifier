@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'SheetsQuickstart'
+mainClassName = 'runner.TestRunner'
 sourceCompatibility = 11
 targetCompatibility = 11
 version = '1.0'
@@ -18,12 +18,22 @@ dependencies {
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support
     compile group: 'org.seleniumhq.selenium', name: 'selenium-support', version: '3.4.0'
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '3.141.59'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
+    compile 'org.testng:testng:6.9.6'
+    
 
 }
 
 test { //this is the gradle task to be executed
     useTestNG() { //Tells Gradle to use TestNG
         useDefaultListeners = true // Tells TestNG to execute its default reporting structure
-        suites 'src/test/testng.xml' //location of our suite.xml
+        //suites 'src/test/testng.xml' //location of our suite.xml
+        reports.html.enabled = false
+    }
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
     }
 }
