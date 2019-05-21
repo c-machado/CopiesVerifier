@@ -38,6 +38,7 @@ public class SheetsQuickstart {
 
     /**
      * Creates an authorized Credential object.
+     *
      * @param HTTP_TRANSPORT The network HTTP Transport.
      * @return An authorized Credential object.
      * @throws IOException If the credentials_old.json file cannot be found.
@@ -62,41 +63,59 @@ public class SheetsQuickstart {
 
     /**
      * Prints the names and majors of students in a sample spreadsheet:
-     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit*/
+     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+     */
 
     public static void authenticate() throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:B7";
+        final String range = "Homepage!A3:B9";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         ValueRange response = service.spreadsheets().values()
                 .get(spreadsheetId, range)
                 .execute();
-        List<List<Object>> values = response.getValues();
+        List<List<Object>> spreadsheetsValues = response.getValues();
 
-        System.out.println("Values INFO: +++++++" + values);
+        System.out.println("Values INFO: +++++++" + spreadsheetsValues);
 
-        Iterator<List<Object>> it_value = values.iterator();
-        while (it_value.hasNext()){
+        /** Option 1
+         * For each 'value' in the <List<Object>> iterator, get the values on the 0 and 1 indexes (id and copy) of each row, if the row contains values.
+         *
+
+        Iterator<List<Object>> rowsIterator = spreadsheetsValues.iterator();
+
+        while (rowsIterator.hasNext()) {
             String id, copy;
-            List value = it_value.next();
-            id = value.get(0).toString();
-            copy = value.get(1).toString();
-            System.out.println("Values ID's:" + id + "\nCOPY: "+copy);
+            List row = rowsIterator.next();
+            if (row.size() > 0) {
+                id = row.get(0).toString();
+                copy = row.get(1).toString();
+                System.out.println("Values ID's:" + id + "\nCOPY: " + copy);
+            }
         }
-
-
-        if (values == null || values.isEmpty()) {
+         */
+        /**
+         * After checking if the 'row' has a valid value, iterate over the <List<Object>> to get each one of the 'rows' and then get the value of each object within the 'row'.
+         * */
+        if (spreadsheetsValues == null || spreadsheetsValues.isEmpty()) {
             System.out.println("No data found.");
         } else {
-            System.out.println("Name, Major");
-            for (List row : values) {
-                // Print columns A and E, which correspond to indices 0 and 4.
-                System.out.printf("%s, %s\n", row.get(0), row.get(1));
+            System.out.println("Id | Copy");
+            for (List row : spreadsheetsValues) {
+               for(Object column : row) {
+                   if (row.indexOf(column) == row.size() - 1) {
+                       System.out.println("%s\n" + column);
+                   }
+                   else{
+                       System.out.println("%s | " + column);
+                   }
+
+               }
             }
         }
     }
 }
+
