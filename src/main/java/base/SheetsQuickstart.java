@@ -96,11 +96,13 @@ public class SheetsQuickstart {
         } else {
             System.out.println("Name | Major");
             for (List row : values) {
-                // Print columns A and E, which correspond to indices 0 and 4.
+                // Iterating in this way will ensure that you only look over existing items,
                 for (Object column : row) {
                     if (row.indexOf(column) == row.size() - 1) {
+                        // If it is the last item in the row, print a break
                         System.out.printf("%s\n", column);
                     } else {
+                        // If it is not the last item in the row, print a space and a |
                         System.out.printf("%s | ", column);
                     }
                 }
