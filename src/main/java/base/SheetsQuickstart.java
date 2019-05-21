@@ -112,7 +112,6 @@ public class SheetsQuickstart {
                    else{
                        System.out.println("%s | " + column);
                    }
-
                }
             }
         }
