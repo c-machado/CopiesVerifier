@@ -1,7 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'application'
 
-mainClassName = 'runner.TestRunner'
 sourceCompatibility = 11
 targetCompatibility = 11
 version = '1.0'
@@ -14,11 +12,12 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     compile 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
-    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+    compile group: 'org.testng', name: 'testng', version: '6.14.3'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support
     compile group: 'org.seleniumhq.selenium', name: 'selenium-support', version: '3.4.0'
+    
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver
     compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '3.141.59'
     // https://mvnrepository.com/artifact/com.google.guava/guava
@@ -28,10 +27,11 @@ dependencies {
 test { //this is the gradle task to be executed
     useTestNG() { //Tells Gradle to use TestNG
         useDefaultListeners = true // Tells TestNG to execute its default reporting structure
-        //suites 'src/test/testng.xml' //location of our suite.xml
+        suites 'src/test/testng.xml' //location of our suite.xml
         reports.html.enabled = false
     }
     testLogging {
+        showStandardStreams = true
         events "PASSED", "FAILED", "SKIPPED"
     }
 }
