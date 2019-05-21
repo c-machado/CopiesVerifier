@@ -68,7 +68,7 @@ public class SheetsQuickstart {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:B7";
+        final String range = "Homepage!A3:B9";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -83,19 +83,27 @@ public class SheetsQuickstart {
         while (it_value.hasNext()){
             String id, copy;
             List value = it_value.next();
-            id = value.get(0).toString();
-            copy = value.get(1).toString();
-            System.out.println("Values ID's:" + id + "\nCOPY: "+copy);
-        }
 
+            if (value.size() > 0) {
+                id = value.get(0).toString();
+                copy = value.get(1).toString();
+                System.out.println("Values ID's:" + id + "\nCOPY: " + copy);
+            }
+        }
 
         if (values == null || values.isEmpty()) {
             System.out.println("No data found.");
         } else {
-            System.out.println("Name, Major");
+            System.out.println("Name | Major");
             for (List row : values) {
                 // Print columns A and E, which correspond to indices 0 and 4.
-                System.out.printf("%s, %s\n", row.get(0), row.get(1));
+                for (Object column : row) {
+                    if (row.indexOf(column) == row.size() - 1) {
+                        System.out.printf("%s\n", column);
+                    } else {
+                        System.out.printf("%s | ", column);
+                    }
+                }
             }
         }
     }
