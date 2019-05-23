@@ -12,6 +12,7 @@ public class AssistantCopies {
 
         try{
             sheets.authenticate();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {

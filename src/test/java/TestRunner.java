@@ -1,3 +1,4 @@
+import base.Homepage;
 import org.testng.annotations.Test;
 import base.SheetsQuickstart;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.security.GeneralSecurityException;
 
 
 public class TestRunner {
-//    private static Homepage home;
+    private static Homepage home;
     private static SheetsQuickstart sheets;
 
 

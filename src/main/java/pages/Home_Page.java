@@ -14,7 +14,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 
 public class Home_Page {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private String videoTitle;
     private String videoDescription;
     private String videoId;
@@ -36,16 +36,16 @@ public class Home_Page {
 
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) .home-carousel__text-image[src]")
-    public WebElement heroCarouselImgSlide1;
+    public static WebElement heroCarouselImgSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) .home-carousel__copy")
-    public WebElement heroCarouselDescpSlide1;
+    public static WebElement heroCarouselDescpSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) a[href]")
-    public WebElement heroCarouselLearnCtaSlide1;
+    public static WebElement heroCarouselLearnCtaSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) a[href]")
-    public WebElement heroCarouselLearnLinkSlide1;
+    public static WebElement heroCarouselLearnLinkSlide1;
 
     @FindBy(css = "[data-tracking-name=video-section] h2")
     public WebElement videoTitleElement;
@@ -107,7 +107,12 @@ public class Home_Page {
         PageFactory.initElements(_driver, this);
     }
 
-    public void getHeroCarouselInfo(){
+    public static void getTagName(String id){
+        System.out.println("ID " +id);
+        System.out.println("CARO " + driver.findElement(By.cssSelector(id)).getTagName());
+    }
+
+    public static void getHeroCarouselInfo(){
         WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
         waituntilCarouselIsLoaded.until(presenceOfElementLocated(By.cssSelector("[data-c-slide-1]")));
 

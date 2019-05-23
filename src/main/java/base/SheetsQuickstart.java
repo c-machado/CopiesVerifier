@@ -13,6 +13,10 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import pages.Home_Page;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,12 +26,22 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SheetsQuickstart {
 
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static Home_Page home;
+    private static WebDriver driver;
+
+    public SheetsQuickstart(){
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        driver.get("https://assistant.google.com/");
+        home = new Home_Page(driver);
+    }
 
     /**
      * Global instance of the scopes required by this quickstart.
@@ -61,6 +75,7 @@ public class SheetsQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
+
     /**
      * Prints the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
@@ -70,7 +85,8 @@ public class SheetsQuickstart {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:B9";
+        final String range = "Homepage!A3:B4";
+
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -78,8 +94,6 @@ public class SheetsQuickstart {
                 .get(spreadsheetId, range)
                 .execute();
         List<List<Object>> spreadsheetsValues = response.getValues();
-
-        System.out.println("Values INFO: +++++++" + spreadsheetsValues);
 
         /** Option 1
          * For each 'value' in the <List<Object>> iterator, get the values on the 0 and 1 indexes (id and copy) of each row, if the row contains values.
@@ -111,6 +125,11 @@ public class SheetsQuickstart {
                    }
                    else{
                        System.out.println("%s | " + column);
+                   }
+                   if(row.indexOf(column) == 0){
+                       String test = column.toString();
+                       System.out.println("CARO TEST " + test);
+                        home.getTagName(test);
                    }
                }
             }
