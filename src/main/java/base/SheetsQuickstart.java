@@ -99,10 +99,10 @@ public class SheetsQuickstart {
                        System.out.println("%s | " + column);
                    }
                    if(row.indexOf(column) == 0){
-                       String test = column.toString();
-                       System.out.println("CARO TEST " + test);
-                       String tag = copiesValidation.getTagName(column);
-                       copiesValidation.getCopy(tag, column);
+                       String selector = column.toString();
+                       System.out.println("CARO TEST " + selector);
+                       String tag = copiesValidation.getTagName(selector);
+                       copiesValidation.getCopy(tag, selector);
                    }
                }
             }

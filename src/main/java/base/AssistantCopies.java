@@ -22,7 +22,7 @@ public class AssistantCopies {
         //home = new Home_Page(driver);
     }
 
-    public void main(String args[]){
+    /*public void main(String args[]){
         sheets = new SheetsQuickstart();
 
         try{
@@ -33,22 +33,22 @@ public class AssistantCopies {
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
+    }*/
+
+    public static String getTagName(String selector){
+        System.out.println("ID " + driver.findElement(By.cssSelector(selector)).getTagName());
+        return driver.findElement(By.cssSelector(selector)).getTagName();
     }
 
-    public static String getTagName(Object selector){
-        System.out.println("ID " + driver.findElement(By.cssSelector(selector.toString())).getTagName());
-        return driver.findElement(By.cssSelector(selector.toString())).getTagName();
-    }
-    
 
-    public static String getCopy(String tag, Object element){
+    public static String getCopy(String tag, String element){
         switch (tag){
             case "id":
-                System.out.println("Case ID " + driver.findElement(By.id(element.toString())));
-                return driver.findElement(By.id(element.toString())).getText();
+                System.out.println("Case ID " + driver.findElement(By.id(element)));
+                return driver.findElement(By.id(element)).getText();
             case "img":
-                System.out.println("Case IMG " + driver.findElement(By.cssSelector(element.toString())).getAttribute("src"));
-                return driver.findElement(By.cssSelector(element.toString())).getAttribute("img");
+                System.out.println("Case IMG " + driver.findElement(By.cssSelector(element)).getAttribute("src"));
+                return driver.findElement(By.cssSelector(element)).getAttribute("img");
             default:
                 throw new RuntimeException("unknown locator " + tag + " : " + element);
         }
