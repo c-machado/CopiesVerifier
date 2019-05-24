@@ -13,10 +13,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import pages.Home_Page;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,24 +21,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class SheetsQuickstart {
 
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    private static Home_Page home;
-    private static WebDriver driver;
-
-    public SheetsQuickstart(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        driver.get("https://assistant.google.com/");
-        home = new Home_Page(driver);
-    }
+    private static AssistantCopies copiesValidation = new AssistantCopies();
 
     /**
      * Global instance of the scopes required by this quickstart.
@@ -95,22 +82,7 @@ public class SheetsQuickstart {
                 .execute();
         List<List<Object>> spreadsheetsValues = response.getValues();
 
-        /** Option 1
-         * For each 'value' in the <List<Object>> iterator, get the values on the 0 and 1 indexes (id and copy) of each row, if the row contains values.
-         *
 
-        Iterator<List<Object>> rowsIterator = spreadsheetsValues.iterator();
-
-        while (rowsIterator.hasNext()) {
-            String id, copy;
-            List row = rowsIterator.next();
-            if (row.size() > 0) {
-                id = row.get(0).toString();
-                copy = row.get(1).toString();
-                System.out.println("Values ID's:" + id + "\nCOPY: " + copy);
-            }
-        }
-         */
         /**
          * After checking if the 'row' has a valid value, iterate over the <List<Object>> to get each one of the 'rows' and then get the value of each object within the 'row'.
          * */
@@ -129,7 +101,8 @@ public class SheetsQuickstart {
                    if(row.indexOf(column) == 0){
                        String test = column.toString();
                        System.out.println("CARO TEST " + test);
-                        home.getTagName(test);
+                       String tag = copiesValidation.getTagName(column);
+                       copiesValidation.getCopy(tag, column);
                    }
                }
             }

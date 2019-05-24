@@ -17,6 +17,7 @@ public class TestRunner {
 //        home.setUp();
         System.out.println("test execution");
         try {
+            sheets = new SheetsQuickstart();
             sheets.authenticate();
         } catch (IOException e) {
             e.printStackTrace();

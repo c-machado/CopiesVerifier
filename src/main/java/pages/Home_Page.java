@@ -107,9 +107,9 @@ public class Home_Page {
         PageFactory.initElements(_driver, this);
     }
 
-    public static void getTagName(String id){
+    public static void getTagName(Object id){
         System.out.println("ID " +id);
-        System.out.println("CARO " + driver.findElement(By.cssSelector(id)).getTagName());
+        System.out.println("CARO " + driver.findElement(By.cssSelector(id.toString())).getTagName());
     }
 
     public static void getHeroCarouselInfo(){
