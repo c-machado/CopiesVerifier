@@ -10,9 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+
 public class Home_Page {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private String videoTitle;
     private String videoDescription;
     private String videoId;
@@ -34,16 +36,16 @@ public class Home_Page {
 
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) .home-carousel__text-image[src]")
-    public WebElement heroCarouselImgSlide1;
+    public static WebElement heroCarouselImgSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) .home-carousel__copy")
-    public WebElement heroCarouselDescpSlide1;
+    public static WebElement heroCarouselDescpSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) a[href]")
-    public WebElement heroCarouselLearnCtaSlide1;
+    public static WebElement heroCarouselLearnCtaSlide1;
 
     @FindBy(css = "[data-c-slide-1].carousel__item:not(.clone) a[href]")
-    public WebElement heroCarouselLearnLinkSlide1;
+    public static WebElement heroCarouselLearnLinkSlide1;
 
     @FindBy(css = "[data-tracking-name=video-section] h2")
     public WebElement videoTitleElement;
@@ -105,9 +107,14 @@ public class Home_Page {
         PageFactory.initElements(_driver, this);
     }
 
-    public void getHeroCarouselInfo(){
+    public static void getTagName(Object id){
+        System.out.println("ID " +id);
+        System.out.println("CARO " + driver.findElement(By.cssSelector(id.toString())).getTagName());
+    }
+
+    public static void getHeroCarouselInfo(){
         WebDriverWait waituntilCarouselIsLoaded = new WebDriverWait(driver,30);
-        waituntilCarouselIsLoaded.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-c-slide-1].carousel__item:not(.clone) a[href]")));
+        waituntilCarouselIsLoaded.until(presenceOfElementLocated(By.cssSelector("[data-c-slide-1]")));
 
         System.out.println("1. hero_carousel_img_slide_1" + heroCarouselImgSlide1.getAttribute("src") + "\n");
 
@@ -117,7 +124,7 @@ public class Home_Page {
         System.out.println("3. hero_carousel_learn_cta_slide_1" + heroCarouselLearnCtaSlide1.getAttribute("innerText") + "\n");
 
         System.out.println("4. hero_carousel_learn_link__slide_1" + heroCarouselLearnLinkSlide1.getAttribute("href") + "\n");
-//        heroCarouselLearnLinkSlide1.click();
+        heroCarouselLearnLinkSlide1.click();
     }
 
     public void getVideoInfo(){
