@@ -13,7 +13,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import org.openqa.selenium.WebElement;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class SheetsQuickstart {
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    private static AssistantCopies copiesValidation = new AssistantCopies();
+    private static CopyVerifier copiesValidation = new CopyVerifier();
 
     /**
      * Global instance of the scopes required by this quickstart.
@@ -44,7 +43,7 @@ public class SheetsQuickstart {
      * @return An authorized Credential object.
      * @throws IOException If the credentials_old.json file cannot be found.
      */
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = SheetsQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
@@ -68,12 +67,13 @@ public class SheetsQuickstart {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 
-    public static void authenticate() throws IOException, GeneralSecurityException {
+    public void authenticate() throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:B4";
+        final String range = "Homepage!A3:C32";
 
+        String selector = "", copyOnSheets = "", copyOnPage = "";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -84,28 +84,29 @@ public class SheetsQuickstart {
 
 
         /**
-         * After checking if the 'row' has a valid value, iterate over the <List<Object>> to get each one of the 'rows' and then get the value of each object within the 'row'.
+         * After checking if the 'row' has a valid value, iterate over the <List<Object>> to get each one of the 'rows'
+         * and then get the value of each object within the 'row'.
          * */
         if (spreadsheetsValues == null || spreadsheetsValues.isEmpty()) {
             System.out.println("No data found.");
         } else {
-            System.out.println("Id | Copy");
             for (List row : spreadsheetsValues) {
                for(Object column : row) {
-                   if (row.indexOf(column) == row.size() - 1) {
-                       System.out.println("%s\n" + column);
+                   if(row.indexOf(column) == 0) {
+                       selector = column.toString();
+                       System.out.println("SELECTOR " + selector);
                    }
-                   else{
-                       System.out.println("%s | " + column);
-                   }
-                   if(row.indexOf(column) == 0){
-                       String selector = column.toString();
-                       System.out.println("CARO TEST " + selector);
-                       String tag = copiesValidation.getTagName(selector);
-                       copiesValidation.getCopy(tag, selector);
+                   if(row.indexOf(column) == 2) {
+                       copyOnSheets = column.toString();
+                       System.out.println("COPY ON SHEETS " + copyOnSheets);
                    }
                }
+                if(!selector.equals("")) {
+                    System.out.println("COPY ON SHEETS 1" + copyOnSheets);
+                    copiesValidation.compareCopies(selector, copyOnSheets);
+                }
             }
+
         }
     }
 }
