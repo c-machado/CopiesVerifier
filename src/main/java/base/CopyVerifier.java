@@ -59,6 +59,7 @@ public class CopyVerifier {
                 System.out.println("Case H3 " + element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
                 return element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ");
 
+
             default:
                 throw new RuntimeException("unknown locator " + tag + " : " + _selector);
         }
