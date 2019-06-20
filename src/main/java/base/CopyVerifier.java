@@ -37,11 +37,18 @@ public class CopyVerifier {
                 System.out.println("Case IMG " + element.getAttribute("data-src"));
                 return element.getAttribute("data-src");
             case "h2":
-                System.out.println("Case H2 " + element.getAttribute("innerHTML").trim());
-                return element.getAttribute("innerHTML").trim();
+                System.out.println("Case H2 " + element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
+                return element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ");
             case "a":
                 System.out.println("Case a " + getCopyFromType(dataType,element));
                 return getCopyFromType(dataType,element);
+            case "p":
+                System.out.println("Case p " + element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
+                return element.getAttribute("innerHTML").replaceAll("&nbsp;", " ").trim();
+            case "div":
+                System.out.println("Case div "+element.getAttribute("data-c-video-id"));
+                String youTubeVideo = "https://youtube.com/watch?v=" + element.getAttribute("data-c-video-id");
+                return youTubeVideo;
 
             default:
                 throw new RuntimeException("unknown locator " + tag + " : " + _selector);
