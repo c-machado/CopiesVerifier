@@ -71,7 +71,9 @@ public class SheetsQuickstart {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-        final String range = "Homepage!A3:C57";
+
+        final String range = "Homepage!A3:C89";
+
 
         String selector = "", copyOnSheets = "", copyOnPage = "";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -104,7 +106,7 @@ public class SheetsQuickstart {
                }
                 if(!selector.equals("")) {
                     System.out.println("COPY ON SHEETS 1" + copyOnSheets);
-                    copiesValidation.compareCopies(selector, copyOnSheets);
+                    copiesValidation.compareCopies(selector, copyOnSheets.trim());
                 }
             }
 
