@@ -12,13 +12,17 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,12 +33,16 @@ public class SheetsQuickstart {
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static CopyVerifier copiesValidation = new CopyVerifier();
 
+
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials_old.json";
+    private static Sheets service;
+
+    //17Q49zfLzpkN483hxixKZPopUQUBVwkplAxssoWx63sA
 
     /**
      * Creates an authorized Credential object.
@@ -67,50 +75,92 @@ public class SheetsQuickstart {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 
-    public void authenticate() throws IOException, GeneralSecurityException {
+    public List<List<Object>> authenticate(String _spreadSheetId, String _range) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        final String spreadsheetId = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
-
-        final String range = "Homepage!A3:C89";
-
-
-        String selector = "", copyOnSheets = "", copyOnPage = "";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         ValueRange response = service.spreadsheets().values()
-                .get(spreadsheetId, range)
+                .get(_spreadSheetId, _range)
                 .execute();
         List<List<Object>> spreadsheetsValues = response.getValues();
 
+        return spreadsheetsValues;
 
-        /**
-         * After checking if the 'row' has a valid value, iterate over the <List<Object>> to get each one of the 'rows'
-         * and then get the value of each object within the 'row'.
-         * */
-        if (spreadsheetsValues == null || spreadsheetsValues.isEmpty()) {
+    }
+
+    public List<List<Object>> validateCopies(List<List<Object>> _spreadsheetsValues) throws IOException, GeneralSecurityException {
+        String selector = "", copyOnSheets = "", copyOnPage = "";
+        List copies = new ArrayList<>();
+        List copiesToReview  = new ArrayList<>();
+
+        // Checking if the 'row' has a valid value
+        if (_spreadsheetsValues == null || _spreadsheetsValues.isEmpty()) {
             System.out.println("No data found.");
         } else {
-            for (List row : spreadsheetsValues) {
-               for(Object column : row) {
-                   if(row.indexOf(column) == 0) {
-                       selector = column.toString();
-                       System.out.println("SELECTOR " + selector);
-                       //copyOnSheets = "";
-                   }
-                   if(row.indexOf(column) == 2) {
-                       copyOnSheets = column.toString();
-                       System.out.println("COPY ON SHEETS " + copyOnSheets);
-                   }
-               }
+            /**
+             * Iterate over the <List<Object>> to get each one of the 'rows'
+             * and then get the value of each object within the 'row'.
+             * */
+            for (List row : _spreadsheetsValues) {
+                for(Object column : row) {
+                    if(row.indexOf(column) == 0) {
+                        selector = column.toString();
+                        System.out.println("SELECTOR " + selector);
+                        //copyOnSheets = "";
+                    }
+                    if(row.indexOf(column) == 2) {
+                        copyOnSheets = column.toString();
+                        System.out.println("COPY ON SHEETS " + copyOnSheets);
+                    }
+                }
+
                 if(!selector.equals("")) {
                     System.out.println("COPY ON SHEETS 1" + copyOnSheets);
-                    copiesValidation.compareCopies(selector, copyOnSheets.trim());
+                    copies =copiesValidation.compareCopies(selector, copyOnSheets.trim());
+                }
+                if (copies.size()>0){
+                    copies.add(Arrays.asList(copiesValidation.compareCopies(selector, copyOnSheets.trim())));
+                    copiesToReview.add(copies);
                 }
             }
-
         }
+        return copiesToReview;
+    }
+
+
+    public AppendValuesResponse appendValues(String spreadsheetId, String range,
+                                                    String valueInputOption, List<List<Object>> _values)
+            throws IOException, GeneralSecurityException {
+
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+            .setApplicationName(APPLICATION_NAME)
+            .build();
+
+
+        // [START sheets_append_values]
+        List<List<Object>> values = Arrays.asList(
+                Arrays.asList(
+                        // Cell values ...
+                )
+                // Additional rows ...
+        );
+        // [START_EXCLUDE silent]
+        values = _values;
+
+
+        // [END_EXCLUDE]
+        ValueRange body = new ValueRange()
+                .setValues(values);
+        AppendValuesResponse result =
+                service.spreadsheets().values().append(spreadsheetId, range, body)
+                        .setValueInputOption(valueInputOption)
+                        .execute();
+        System.out.printf("%d cells appended.", result.getUpdates().getUpdatedCells());
+        // [END sheets_append_values]
+        return result;
     }
 }
 

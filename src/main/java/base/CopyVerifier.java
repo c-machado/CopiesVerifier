@@ -6,22 +6,29 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import utils.Utils;
+import org.testng.asserts.SoftAssert;
 
 
-
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CopyVerifier {
 
     private static SheetsQuickstart sheets;
     private static WebDriver driver;
-
+    private static final String spreadSheetId = "17Q49zfLzpkN483hxixKZPopUQUBVwkplAxssoWx63sA";
+    private static final String range = "Homepage!A3:C89";
 
     public CopyVerifier(){
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("https://assistant.google.com/");
-        //home = new Home_Page(driver);
     }
 
     public String getCopy(String _selector){
@@ -85,7 +92,16 @@ public class CopyVerifier {
         }
     }
 
-    public void compareCopies(String _selector, String _copyOnSheets){
-        Assert.assertEquals(getCopy(_selector), _copyOnSheets, "Copies match");
+    public List<List<Object>> compareCopies(String _selector, String _copyOnSheets) throws IOException, GeneralSecurityException {
+        List copiesToReview = new ArrayList<>();
+        List row = new  ArrayList<>();
+
+        if(!getCopy(_selector).equals(_copyOnSheets)){
+            row.add(Arrays.asList(_selector,_copyOnSheets));
+            copiesToReview.add(row);
+            System.out.println("en if " + copiesToReview);
+            //sheets.appendValues(spreadSheetId, range,"ROW",row);
+        }
+        return row;
     }
 }
