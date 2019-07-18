@@ -14,7 +14,6 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,6 +77,7 @@ public class SheetsQuickstart {
     public List<List<Object>> authenticate(String _spreadSheetId, String _range) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -123,6 +123,7 @@ public class SheetsQuickstart {
                 if (copies.size()>0){
                     copies.add(Arrays.asList(copiesValidation.compareCopies(selector, copyOnSheets.trim())));
                     copiesToReview.add(copies);
+                    copiesValidation.compareCopies(selector, copyOnSheets.trim());
                 }
             }
         }
