@@ -21,6 +21,7 @@ public class Browser {
         this.driver = new ChromeDriver();
         this.driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         this.driver.get(_url);
+
     }
 
     public String getCopy(String _selector){

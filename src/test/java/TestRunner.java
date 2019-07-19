@@ -1,3 +1,4 @@
+
 import base.Browser;
 import org.testng.annotations.Test;
 import base.SpreadSheets;
@@ -21,10 +22,11 @@ public class TestRunner {
     @Test
     public void feature() {
         try {
+
             sourceSheet = new SpreadSheets(spreadsheetIdCopies);
             errorSheet = new SpreadSheets(spreadSheetIdErrors);
             browser = new Browser(url);
-            sourceSheet.authenticate();
+            sourceSheet.authenticate(spreadsheetIdCopies,rangeInput);
             boolean copiesMatched ;
             List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeInput);
             for (int rowNumber = 0; rowNumber < copiesOrigin.size(); rowNumber++) {
@@ -56,7 +58,7 @@ public class TestRunner {
 
             }
 
-            errorSheet.authenticate();
+            errorSheet.authenticate(spreadSheetIdErrors,rangeOutput);
             List rows = new ArrayList();
             List column = new ArrayList();
             column.add("hola");
@@ -72,6 +74,7 @@ public class TestRunner {
             List<List<Object>> rows = sheets.validateCopies(spreadSheetValues);
             //sheets.authenticate(spreadSheetIdErrors,range);
             sheets.appendValues(spreadSheetIdErrors,range,"ROW", rows);*/
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
