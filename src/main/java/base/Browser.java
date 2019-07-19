@@ -13,17 +13,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class CopyVerifier {
+public class Browser {
 
-    private static SheetsQuickstart sheets;
-    private static WebDriver driver;
-    private static final String spreadSheetId = "17Q49zfLzpkN483hxixKZPopUQUBVwkplAxssoWx63sA";
-    private static final String range = "Homepage!A3:C89";
+    private WebDriver driver;
 
-    public CopyVerifier(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        driver.get("https://assistant.google.com/");
+    public Browser(String _url){
+        this.driver = new ChromeDriver();
+        this.driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        this.driver.get(_url);
+
     }
 
     public String getCopy(String _selector){
