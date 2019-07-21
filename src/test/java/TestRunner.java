@@ -13,8 +13,9 @@ public class TestRunner {
     private SpreadSheets errorSheet;
     private final String spreadsheetIdCopies = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
     private final String spreadSheetIdErrors = "17Q49zfLzpkN483hxixKZPopUQUBVwkplAxssoWx63sA";
+    //private final String spreadSheetIdErrors = "1sXL9zoHI-xdbQj--TGzcaGPu_zL01kZuFKcySQyLgsM";
     private final String rangeInput = "Homepage!A3:C89";
-    private final String rangeOutput = "Homepage!A1:C1";
+    private final String rangeOutput = "Homepage!A4:C4";
 
     private Browser browser;
     private final String url = "https://assistant.google.com/";
@@ -27,16 +28,19 @@ public class TestRunner {
             errorSheet = new SpreadSheets(spreadSheetIdErrors);
             browser = new Browser(url);
             sourceSheet.authenticate(spreadsheetIdCopies,rangeInput);
+            errorSheet.authenticate(spreadSheetIdErrors,rangeOutput);
             boolean copiesMatched ;
             List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeInput);
+            String selector = "", copyOnSheet = "", copyOnSite = "";
+            List rows = new ArrayList();
             for (int rowNumber = 0; rowNumber < copiesOrigin.size(); rowNumber++) {
                 copiesMatched = false;
                 List<Object> row = copiesOrigin.get(rowNumber);
-                String selector = "", copyOnSheet = "", copyOnSite = "";
+
                 if(row.size()>0) {
                     selector = row.get(0).toString();
                     if(row.size()>2) {
-                        copyOnSheet = row.get(2).toString();
+                        copyOnSheet = row.get(2).toString().trim();
                     }
                 }
                 if(!selector.isEmpty()) {
@@ -44,6 +48,11 @@ public class TestRunner {
                     copiesMatched = copyOnSheet.equals(copyOnSite);
                     if(copiesMatched==false){
                         //save in the error file
+                         List column = new ArrayList();
+                         column.add(selector);
+                         column.add(copyOnSite);
+                         column.add(copyOnSheet);
+                         rows.add(column);
 
                     }
                 }
@@ -58,15 +67,8 @@ public class TestRunner {
 
             }
 
-            errorSheet.authenticate(spreadSheetIdErrors,rangeOutput);
-            List rows = new ArrayList();
-            List column = new ArrayList();
-            column.add("hola");
-            column.add("como");
-            column.add("estas");
-            rows.add(column);
 
-           // errorSheet.appendValues(rangeOutput,rows);
+            errorSheet.appendValues(rangeOutput,rows);
 
             //System.out.println("copies " + copiesOrigin.get(0).get(2));
 
