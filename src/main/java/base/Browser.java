@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Browser {
 
-    private WebDriver driver;
+    public WebDriver driver;
 
     public Browser(String _url){
         this.driver = new ChromeDriver();
@@ -42,6 +42,9 @@ public class Browser {
             case "h2":
                 System.out.println("Case H2 " + element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
                 return element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ");
+            case "h1":
+                System.out.println("Case H1 " + element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
+                return element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ");
             case "a":
                 System.out.println("Case a " + getCopyFromType(dataType,element));
                 return getCopyFromType(dataType,element);
@@ -49,9 +52,8 @@ public class Browser {
                 System.out.println("Case p " + Utils.htmlToText(element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ")));
                 return Utils.htmlToText(element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
             case "div":
-                System.out.println("Case div "+element.getAttribute("data-c-video-id"));
-                String youTubeVideo = "https://youtube.com/watch?v=" + element.getAttribute("data-c-video-id");
-                return youTubeVideo;
+                System.out.println("Case div " + getCopyFromType(dataType,element));
+                return getCopyFromType(dataType,element);
             case "span":
                 System.out.println("Case span "+element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " "));
                 return element.getAttribute("innerHTML").trim().replaceAll("&nbsp;", " ");
@@ -79,7 +81,9 @@ public class Browser {
             case "alt":
                 System.out.println("Case altText " + _element.getAttribute("alt"));
                 return  _element.getAttribute("alt");
-
+            case "youtube":
+                System.out.println("Case div "+_element.getAttribute("data-c-video-id"));
+                return "https://youtube.com/watch?v=" + _element.getAttribute("data-c-video-id");
             default:
                 throw new RuntimeException("unknown locator 1 " +_element);
         }

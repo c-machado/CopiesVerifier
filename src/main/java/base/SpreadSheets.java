@@ -14,8 +14,6 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
-//import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.*;
-//import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,7 +48,6 @@ public class SpreadSheets {
 
     private final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
-
     /**
      * Creates an authorized Credential object.
      *
@@ -62,9 +59,9 @@ public class SpreadSheets {
         // Load client secrets.
         InputStream in = SpreadSheets.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
 
-       /* if (in == null) {
+        if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-        }*/
+        }
 
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -80,8 +77,6 @@ public class SpreadSheets {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-
-
     /**
      * Prints the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
@@ -95,7 +90,6 @@ public class SpreadSheets {
 
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-        //service = this.getCredentials();
     }
 
     public List<List<Object>> getValues(String _range) throws IOException {
