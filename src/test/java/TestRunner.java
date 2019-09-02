@@ -1,11 +1,15 @@
 
 import base.Browser;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import base.SpreadSheets;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 
 public class TestRunner {
@@ -16,11 +20,18 @@ public class TestRunner {
 
     //private final String spreadSheetIdErrors = "1sXL9zoHI-xdbQj--TGzcaGPu_zL01kZuFKcySQyLgsM";
     private final String rangeInput = "Homepage!A3:C89";
+
+//    private final String rangePhonesInput = "Phones!A3:C170";
+    private final String rangeSpeakersInput = "Smart Displays!A3:C80";
+//    private final String rangeOutput = "Homepage!A4:C4";
+//    private final String rangePhonesOutput = "Phones!A4:C112";
+    private final String rangeSpeakersOutput = "Smart Displays!A4:C100";
+
     private final String rangeOutput = "Homepage!A4:C4";
 
 
     private Browser browser;
-    private final String url = "https://assistant.google.com/";
+    private final String url = "https://assistant.google.com/platforms/displays/";
 
     @Test
     public void feature() throws IOException, GeneralSecurityException {
@@ -29,11 +40,14 @@ public class TestRunner {
             sourceSheet = new SpreadSheets(spreadsheetIdCopies);
             errorSheet = new SpreadSheets(spreadSheetIdErrors);
             browser = new Browser(url);
-            sourceSheet.authenticate(spreadsheetIdCopies, rangeInput);
-
-            errorSheet.authenticate(spreadSheetIdErrors, rangeOutput);
+            /*sourceSheet.authenticate(spreadsheetIdCopies, rangeInput);
+            errorSheet.authenticate(spreadSheetIdErrors, rangeOutput);        */
+            sourceSheet.authenticate(spreadsheetIdCopies,rangeSpeakersInput);
+            errorSheet.authenticate(spreadSheetIdErrors,rangeSpeakersOutput);
             boolean copiesMatched;
-            List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeInput);
+            List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeSpeakersInput);
+            //List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeInput);
+
             String selector = "", copyOnSheet = "", copyOnSite = "";
             List rows = new ArrayList();
             for (int rowNumber = 0; rowNumber < copiesOrigin.size(); rowNumber++) {
@@ -58,11 +72,8 @@ public class TestRunner {
                         column.add(copyOnSite);
                         column.add(copyOnSheet);
                         rows.add(column);
-
-
                     }
                 }
-
 
                 System.out.println("----------");
                 System.out.println("copies \n" +
@@ -72,6 +83,7 @@ public class TestRunner {
                         "\tCopyOnSite > " + copyOnSite + "\n" +
                         "\tCopiesMatched > " + copiesMatched);
                 System.out.println("----------");
+
            }
 
                 errorSheet.appendValues(rangeOutput, rows);
@@ -92,4 +104,8 @@ public class TestRunner {
 
     }
 
+    @AfterClass(alwaysRun = true)
+    public void tearDownClass() throws Exception {
+       browser.driver.quit();
+    }
 }
