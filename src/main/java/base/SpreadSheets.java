@@ -48,6 +48,7 @@ public class SpreadSheets {
 
     private final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
+
     /**
      * Creates an authorized Credential object.
      *
@@ -62,7 +63,6 @@ public class SpreadSheets {
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
-
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.

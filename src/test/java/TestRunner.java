@@ -20,11 +20,15 @@ public class TestRunner {
 
     //private final String spreadSheetIdErrors = "1sXL9zoHI-xdbQj--TGzcaGPu_zL01kZuFKcySQyLgsM";
     private final String rangeInput = "Homepage!A3:C89";
+
 //    private final String rangePhonesInput = "Phones!A3:C170";
     private final String rangeSpeakersInput = "Smart Displays!A3:C80";
 //    private final String rangeOutput = "Homepage!A4:C4";
 //    private final String rangePhonesOutput = "Phones!A4:C112";
     private final String rangeSpeakersOutput = "Smart Displays!A4:C100";
+
+    private final String rangeOutput = "Homepage!A4:C4";
+
 
     private Browser browser;
     private final String url = "https://assistant.google.com/platforms/displays/";
@@ -43,6 +47,7 @@ public class TestRunner {
             boolean copiesMatched;
             List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeSpeakersInput);
             //List<List<Object>> copiesOrigin = sourceSheet.getValues(rangeInput);
+
             String selector = "", copyOnSheet = "", copyOnSite = "";
             List rows = new ArrayList();
             for (int rowNumber = 0; rowNumber < copiesOrigin.size(); rowNumber++) {
@@ -78,12 +83,22 @@ public class TestRunner {
                         "\tCopyOnSite > " + copyOnSite + "\n" +
                         "\tCopiesMatched > " + copiesMatched);
                 System.out.println("----------");
-            }
 
-            errorSheet.appendValues(rangeSpeakersOutput, rows);
-        } catch (IOException e) {
+           }
+
+                errorSheet.appendValues(rangeOutput, rows);
+
+
+                //System.out.println("copies " + copiesOrigin.get(0).get(2));
+
+            /*List<List<Object>> spreadSheetValues = sheets.authenticate(spreadsheetIdCopies,range);
+            List<List<Object>> rows = sheets.validateCopies(spreadSheetValues);
+            //sheets.authenticate(spreadSheetIdErrors,range);
+            sheets.appendValues(spreadSheetIdErrors,range,"ROW", rows);*/
+
+        } catch(IOException e){
             e.printStackTrace();
-        } catch (GeneralSecurityException e) {
+        } catch(GeneralSecurityException e){
             e.printStackTrace();
         }
 
