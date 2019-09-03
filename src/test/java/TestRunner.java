@@ -18,10 +18,6 @@ public class TestRunner {
     private final String spreadsheetIdCopies = "1okfhWpOVqNP6zqm6hqNJVfUygqsrtgn-Zg4B-wlAwgo";
     private final String spreadSheetIdErrors = "17Q49zfLzpkN483hxixKZPopUQUBVwkplAxssoWx63sA";
 
-    private final String rangeInput = "Smart Displays!A3:C53";
-    private final String rangeOutput = "Smart Displays!A3:C53";
-
-
     private Browser browser;
     private final String url = "https://assistant.google.com/platforms/displays/";
     private final String base_URL = "https://assistant.google.com";
@@ -121,6 +117,7 @@ public class TestRunner {
                             column.add(copyOnSheet);
                             rows.add(column);
                         }
+
                     }
                     System.out.println("----------");
                     System.out.println("copies \n" +
@@ -134,6 +131,7 @@ public class TestRunner {
                 errorSheet.appendValues(sheet, rows);
             }
 
+
         } catch(IOException e){
             e.printStackTrace();
         } catch(GeneralSecurityException e){
@@ -143,6 +141,7 @@ public class TestRunner {
     }
 
     @AfterTest
+
     public void tearDownClass() throws Exception {
        browser.driver.quit();
     }
